@@ -1,29 +1,36 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { getToken } from "@/api/storage";
+import AuthContext from "@/context/AuthContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
+import { useEffect, useState } from "react";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  //Create a state to keep track of the user's authentication status
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  // create my query client
+  const queryClient = new QueryClient();
 
+  const checkToken = async () => {
+    const token = await getToken();
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  };
+
+  // /Login -> auth/login
+  // useEffect will run the check token code the second my app launches or reloads
+
+  useEffect(() => {
+    checkToken();
+  }, []);
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    // provide my client to the entire app
+    <QueryClientProvider client={queryClient}>
+      {/* Provide the values for the auth context */}
+      <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        <Stack />
+      </AuthContext.Provider>
+    </QueryClientProvider>
   );
 }
