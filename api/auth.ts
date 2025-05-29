@@ -17,7 +17,11 @@ const register = async (username: string, password: string, image: string) => {
   } as any);
 
   //response
-  const { data } = await instance.post("signup", formData); //request
+  const { data } = await instance.post(
+    "/mini-project/api/auth/register",
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  ); //request
   // response alot of info { data: {"token": "eyekdhfiohsifoisyfowefh", "message": "user created succesfully"}}
 
   if (data.token) {
