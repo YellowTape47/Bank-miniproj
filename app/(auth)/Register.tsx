@@ -19,13 +19,13 @@ const Register = () => {
   const { setIsAuthenticated } = useContext(AuthContext);
   const router = useRouter();
 
-  const { mutate, data, error } = useMutation({
+  const { mutate, data } = useMutation({
     mutationKey: ["register"],
     mutationFn: () => register(name, password, image),
     onSuccess: () => {
       setIsAuthenticated(true);
       console.log("Captured Token --> ", data);
-      console.log("Captured Token --> ", error?.cause, error?.message);
+
       router.replace("/");
     },
     onError: (error) => {

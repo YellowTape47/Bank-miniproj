@@ -29,6 +29,7 @@ const register = async (username: string, password: string, image: string) => {
   if (data.token) {
     await storeToken(data.token);
   }
+  console.log("token --> ", data.token);
 
   console.log("Captured Data --> ", formData);
   return data;
