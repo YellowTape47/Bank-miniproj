@@ -9,11 +9,13 @@ const register = async (username: string, password: string, image: string) => {
   const formData = new FormData();
   formData.append("username", username);
   formData.append("password", password);
+
   // if no image in backend no need
   formData.append("image", {
-    name: "image.jpg",
+    name: "image.jpeg",
     uri: image,
     type: "image/jpeg",
+    quality: "low",
   } as any);
 
   //response
@@ -28,12 +30,16 @@ const register = async (username: string, password: string, image: string) => {
     await storeToken(data.token);
   }
 
+  console.log("Captured Data --> ", formData);
   return data;
 };
 
 //login
 const login = async (username: string, password: string) => {
-  const { data } = await instance.post("signin", { username, password });
+  const { data } = await instance.post("/mini-project/api/auth/login", {
+    username,
+    password,
+  });
 
   if (data.token) {
     await storeToken(data.token);

@@ -19,11 +19,13 @@ const Register = () => {
   const { setIsAuthenticated } = useContext(AuthContext);
   const router = useRouter();
 
-  const { mutate } = useMutation({
+  const { mutate, data, error } = useMutation({
     mutationKey: ["register"],
     mutationFn: () => register(name, password, image),
     onSuccess: () => {
       setIsAuthenticated(true);
+      console.log("Captured Token --> ", data);
+      console.log("Captured Token --> ", error?.cause, error?.message);
       router.replace("/");
     },
     onError: (error) => {
@@ -37,7 +39,7 @@ const Register = () => {
       mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      // quality: 1,
     });
 
     console.log(result);
