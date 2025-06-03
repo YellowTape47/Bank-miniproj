@@ -1,7 +1,7 @@
 import { deposite, me } from "@/api/auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, Text, TextInput, View } from "react-native";
 
 // const handleProfileButton = () => router.push("../(tabs)/home/Profile");
 // const handleTransactionsButton = () =>
@@ -83,13 +83,3 @@ const Index = () => {
 };
 
 export default Index;
-
-const styles = StyleSheet.create({
-  tabs: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    padding: 3,
-    borderRadius: 5,
-  },
-});

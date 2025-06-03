@@ -35,7 +35,24 @@ const register = async (username: string, password: string, image: string) => {
   return data;
 };
 
-//login
+// //login
+// const login = async (username: string, password: string) => {
+//   console.log("enter parms: ", username, password);
+//   const { data } = await instance.post("/mini-project/api/auth/login", {
+//     username,
+//     password,
+//   });
+
+//   console.log("data :", data);
+
+//   console.log("token :", data.token);
+//   if (data.token) {
+//     await storeToken(data.token);
+//   }
+
+//   return data;
+// };
+
 const login = async (username: string, password: string) => {
   const { data } = await instance.post("/mini-project/api/auth/login", {
     username,

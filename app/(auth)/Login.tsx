@@ -18,20 +18,23 @@ const Login = () => {
   const { setIsAuthenticated } = useContext(AuthContext);
 
   const { mutate, isSuccess, isError } = useMutation({
-    mutationKey: ["Login"],
+    mutationKey: ["LoginAsAUser"],
     mutationFn: () => login(username, password),
-    onSuccess: async () => {
-      await setIsAuthenticated(true);
+    onSuccess: () => {
+      setIsAuthenticated(true);
       router.replace("/home");
       console.log("logged in successfully as: ", username);
     },
   });
 
   if (isSuccess) return <Text>Successfully Login...</Text>;
-  //   if (isError) return <Text>Error</Text>;
+  if (isError) return <Text>Error</Text>;
 
   const handleLogin = () => {
+    // console.log("handling Login --> ", handleLogin);
+
     mutate();
+    // console.log("mutate --> ", mutate);
   };
 
   return (
