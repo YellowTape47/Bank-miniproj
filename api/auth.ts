@@ -49,4 +49,19 @@ const login = async (username: string, password: string) => {
   return data;
 };
 
-export { login, register };
+//me
+const me = async () => {
+  const { data } = await instance.get("/mini-project/api/auth/me");
+  return data;
+};
+
+//deposite
+const deposite = async (amount: number) => {
+  const { data } = await instance.put(
+    "/mini-project/api/transactions/deposit",
+    { amount }
+  );
+  return data;
+};
+
+export { deposite, login, me, register };

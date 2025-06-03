@@ -3,7 +3,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 
 const homeLayout = () => {
-  return <Stack />;
+  return <Stack screenOptions={{ headerShown: false }} />;
 };
 
 export default homeLayout;

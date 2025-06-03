@@ -8,7 +8,7 @@ const ProtectedLayout = () => {
     return <Redirect href={"/(auth)/Register"} />;
   }
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" />
     </Stack>
   );
