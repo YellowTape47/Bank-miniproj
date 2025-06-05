@@ -68,8 +68,10 @@ const login = async (username: string, password: string) => {
 
 //me
 const me = async () => {
-  const { data } = await instance.get("/mini-project/api/auth/me");
-  return data;
+  console.log(" I am here <------");
+  const response = await instance.get("/mini-project/api/auth/me");
+  console.log("me data api  -----> ", response.data);
+  return response.data;
 };
 
 //deposite

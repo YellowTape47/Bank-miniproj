@@ -13,7 +13,9 @@ const Index = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["me"],
     queryFn: me,
+    throwOnError: true,
   });
+
   const { mutate } = useMutation({
     mutationKey: ["deposite"],
     mutationFn: () => deposite(Number(amount)),
@@ -29,7 +31,7 @@ const Index = () => {
     mutate();
   };
   if (isLoading) return <Text>Loading...</Text>;
-  if (error) return <Text>Something went wrong</Text>;
+  if (error) return <Text>Something went wrong </Text>;
 
   return (
     <View style={{ justifyContent: "space-between" }}>
