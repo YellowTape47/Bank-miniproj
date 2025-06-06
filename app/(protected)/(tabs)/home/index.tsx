@@ -16,7 +16,7 @@ const Index = () => {
     throwOnError: true,
   });
 
-  const { mutate } = useMutation({
+  const { mutate: depositeMutate } = useMutation({
     mutationKey: ["deposite"],
     mutationFn: () => deposite(Number(amount)),
     onSuccess: (response) => {
@@ -27,8 +27,22 @@ const Index = () => {
     },
   });
 
+  const { mutate: withdrawMutate } = useMutation({
+    mutationKey: ["withdraw"],
+    mutationFn: () => deposite(Number(amount)),
+    onSuccess: (response) => {
+      console.log("Withdraw done", response);
+    },
+    onError: (err) => {
+      console.log("Error:", err);
+    },
+  });
+  const handleWithdraw = () => {
+    withdrawMutate();
+  };
+
   const handleDeposite = () => {
-    mutate();
+    depositeMutate();
   };
   if (isLoading) return <Text>Loading...</Text>;
   if (error) return <Text>Something went wrong </Text>;
@@ -77,6 +91,12 @@ const Index = () => {
           title="Deposite"
           onPress={() => {
             handleDeposite();
+          }}
+        />
+        <Button
+          title="Withdraw"
+          onPress={() => {
+            handleWithdraw();
           }}
         />
       </View>
