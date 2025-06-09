@@ -1,10 +1,28 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, TextInput, View } from "react-native";
 
 const Transactions = () => {
   return (
     <View>
-      <Text>Transactions</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignSelf: "center",
+          marginTop: 15,
+        }}
+      >
+        <TextInput
+          placeholder="Search"
+          style={{
+            borderWidth: 1,
+            padding: 10,
+            borderRadius: 10,
+            width: 325,
+          }}
+        />
+        <Button title="Search" />
+      </View>
     </View>
   );
 };

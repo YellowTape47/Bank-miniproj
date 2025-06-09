@@ -1,12 +1,8 @@
 import { deposite, me } from "@/api/auth";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
-
-// const handleProfileButton = () => router.push("../(tabs)/home/Profile");
-// const handleTransactionsButton = () =>
-//   router.push("../(tabs)/home/Transactions");
-// const handleUsersButton = () => router.push("../(tabs)/home/Users");
+import { formatAmountInput } from "./formatAmount";
 
 const Index = () => {
   const [amount, setAmount] = useState(""); //this useState is used in mutation
@@ -15,35 +11,44 @@ const Index = () => {
     queryFn: me,
     throwOnError: true,
   });
-
+  const queryClient = useQueryClient();
   const { mutate: depositeMutate } = useMutation({
     mutationKey: ["deposite"],
-    mutationFn: () => deposite(Number(amount)),
+    mutationFn: () => deposite(Number(amount.replace(/,/g, ""))),
     onSuccess: (response) => {
-      console.log("Deposite done", response);
-    },
-    onError: (err) => {
-      console.log("Error:", err);
+      console.log("Deposite successful", response);
+      queryClient.invalidateQueries({ queryKey: ["me"] });
     },
   });
 
   const { mutate: withdrawMutate } = useMutation({
     mutationKey: ["withdraw"],
-    mutationFn: () => deposite(Number(amount)),
+    mutationFn: (amount: number) => deposite(Number(amount)),
     onSuccess: (response) => {
-      console.log("Withdraw done", response);
+      console.log("Withdraw successful", response);
+      queryClient.invalidateQueries({ queryKey: ["me"] });
     },
     onError: (err) => {
-      console.log("Error:", err);
+      console.log("Withdraw error:", err);
     },
   });
+
   const handleWithdraw = () => {
-    withdrawMutate();
+    const numericAmount = Number(amount.replace(/,/g, ""));
+    withdrawMutate(-numericAmount);
   };
 
   const handleDeposite = () => {
+    const numericAmount = Number(amount.replace(/,/g, ""));
+
+    // if (!numericAmount || numericAmount <= 0) {
+    //   alert("Please enter a positive number.");
+    //   return;
+    // }
+
     depositeMutate();
   };
+
   if (isLoading) return <Text>Loading...</Text>;
   if (error) return <Text>Something went wrong </Text>;
 
@@ -62,7 +67,13 @@ const Index = () => {
       >
         <Text>Your name: {data.username}</Text>
         <Text>Your Available Balance:</Text>
-        <Text> {data.balance} KWD</Text>
+        <Text>
+          {Number(data.balance).toLocaleString("en-US", {
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3,
+          })}{" "}
+          KWD
+        </Text>
       </View>
       <View
         style={{
@@ -75,16 +86,18 @@ const Index = () => {
           borderRadius: 10,
         }}
       >
-        <Text>Your Deposite:</Text>
+        <Text>Amount to Deposit and Withdraw:</Text>
         <TextInput
           placeholder="Amount"
           value={amount}
-          onChangeText={setAmount}
+          onChangeText={(text) => setAmount(formatAmountInput(text))}
+          keyboardType="numeric"
           style={{
             borderWidth: 1,
             borderColor: "#000",
             padding: 10,
             margin: 10,
+            borderRadius: 10,
           }}
         />
         <Button
