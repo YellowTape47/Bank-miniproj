@@ -23,6 +23,7 @@ const Transactions = () => {
         />
         <Button title="Search" />
       </View>
+      <View></View>
     </View>
   );
 };
