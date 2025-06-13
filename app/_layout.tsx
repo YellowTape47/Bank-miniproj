@@ -29,7 +29,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       {/* Provide the values for the auth context */}
       <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-        <Stack />
+        <Stack screenOptions={{ headerShown: false }} />
       </AuthContext.Provider>
     </QueryClientProvider>
   );

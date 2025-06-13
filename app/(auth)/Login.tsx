@@ -50,6 +50,7 @@ const Login = () => {
         placeholder="password"
         style={styles.input}
         value={password}
+        secureTextEntry={true}
         onChangeText={setPassword}
       />
       <TouchableOpacity onPress={handleLogin} style={styles.btn}>

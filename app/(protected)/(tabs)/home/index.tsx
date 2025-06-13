@@ -1,4 +1,4 @@
-import { deposite, me } from "@/api/auth";
+import { deposite, me, withdraw } from "@/api/auth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Bell,
@@ -24,12 +24,13 @@ import {
 import { formatAmountInput } from "./formatAmount";
 
 const Index = () => {
-  const [amount, setAmount] = useState(""); //this useState is used in mutation
-  const { data } = useQuery({
+  const [amount, setAmount] = useState(""); //this useState is used in Mutation
+  const { data, isLoading, error } = useQuery({
     queryKey: ["me"],
     queryFn: me,
     throwOnError: true,
   });
+
   const queryClient = useQueryClient();
   const { mutate: depositeMutate } = useMutation({
     mutationKey: ["deposite"],
@@ -42,7 +43,7 @@ const Index = () => {
 
   const { mutate: withdrawMutate } = useMutation({
     mutationKey: ["withdraw"],
-    mutationFn: (amount: number) => deposite(Number(amount)),
+    mutationFn: (amount: number) => withdraw(Number(amount)),
     onSuccess: (response) => {
       console.log("Withdraw successful", response);
       queryClient.invalidateQueries({ queryKey: ["me"] });
@@ -54,7 +55,7 @@ const Index = () => {
 
   const handleWithdraw = () => {
     const numericAmount = Number(amount.replace(/,/g, ""));
-    withdrawMutate(-numericAmount);
+    withdrawMutate(numericAmount);
   };
 
   const handleDeposit = () => {
@@ -79,8 +80,10 @@ const Index = () => {
 
   const [toggleAnimation] = useState(new Animated.Value(0));
 
-  // if (isLoading) return <Text>Loading...</Text>;
-  // if (error) return <Text>Something went wrong </Text>;
+  const [showBalance, setShowBalance] = useState(true);
+
+  if (isLoading) return <Text>Loading...</Text>;
+  if (error) return <Text>Something went wrong </Text>;
 
   const theme = isDarkMode ? darkTheme : lightTheme;
 
@@ -97,8 +100,6 @@ const Index = () => {
     inputRange: [0, 1],
     outputRange: [2, 26],
   });
-
-  const [showBalance, setShowBalance] = useState(true);
 
   return (
     <SafeAreaView
@@ -126,7 +127,8 @@ const Index = () => {
           <View style={styles.profileImageContainer}>
             <Image
               source={{
-                uri: "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png",
+                uri:
+                  "https://react-bank-project.eapi.joincoded.com/" + data.image,
               }}
               style={styles.profileImage}
             />
@@ -258,12 +260,8 @@ const Index = () => {
                 { color: theme.balanceCardPrimary },
               ]}
             >
-              {showBalance ? formatBalance(data.balance) : "•••••••"}
+              {showBalance ? formatBalance(data.balance) : "KWD •••••••"}
             </Text>
-
-            <View style={styles.balanceFooter}>
-              <View style={styles.balanceChange}></View>
-            </View>
           </View>
         </View>
       </View>
@@ -601,25 +599,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
   balanceAmount: {
-    fontSize: 38,
+    fontSize: 36,
     fontWeight: "800",
     marginBottom: 24,
     letterSpacing: -1,
   },
-  balanceFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  balanceChange: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgba(16, 185, 129, 0.15)",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-
   quickActionsSection: {
     paddingHorizontal: 24,
     marginBottom: 32,

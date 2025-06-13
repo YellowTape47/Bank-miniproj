@@ -67,10 +67,20 @@ const deposite = async (amount: number) => {
   return data;
 };
 
+//withdraw
+const withdraw = async (amount: number) => {
+  const { data } = await instance.put(
+    "/mini-project/api/transactions/withdraw",
+    { amount }
+  );
+  return data;
+};
+
 //list of transactions
 const listOfTransactions = async () => {
   const response = await instance.get("/mini-project/api/transactions/my");
-  return response;
+  console.log("This is my Trasfer list --> ", response.data);
+  return response.data;
 };
 
-export { deposite, listOfTransactions, login, me, register };
+export { deposite, listOfTransactions, login, me, register, withdraw };
