@@ -5,14 +5,14 @@ type TransactionListProps = {
   amountAction: number;
   type: string;
   from: number;
-  to: string;
+  to?: string;
 };
 
 const TransactionList = ({
   amountAction,
   type,
-  to,
   from,
+  to,
 }: TransactionListProps) => {
   const amountSymbol = () => {
     if (type.toUpperCase() === "WITHDRAW") return "- ";
